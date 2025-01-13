@@ -68,6 +68,9 @@ export default {
       "250": "250ms",
       "300": "300ms",
     },
+    transitionTimingFunction: {
+      smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
+    },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],

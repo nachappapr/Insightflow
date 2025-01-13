@@ -1,4 +1,30 @@
-const AnimatedWaveLogo = ({ size = 48 }) => {
+type AnimatedWaveLogoProps = {
+  size?: number;
+  isBrandTextRequired?: boolean;
+};
+
+const AnimatedWaveLogo = ({
+  size = 48,
+  isBrandTextRequired = true,
+}: AnimatedWaveLogoProps) => {
+  const renderBrandText = () => {
+    if (!isBrandTextRequired) return null;
+
+    return (
+      <div className="flex flex-col">
+        <span
+          className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent
+                       animate-gradient-x"
+        >
+          InsightFlow
+        </span>
+        <span className="text-sm text-gray-500 opacity-0 animate-fade-in">
+          Feedback Platform
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="flex items-center gap-3">
       <div className="relative" style={{ width: size, height: size }}>
@@ -85,17 +111,7 @@ const AnimatedWaveLogo = ({ size = 48 }) => {
       </div>
 
       {/* Brand Text with Animation */}
-      <div className="flex flex-col">
-        <span
-          className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent
-                       animate-gradient-x"
-        >
-          InsightFlow
-        </span>
-        <span className="text-sm text-gray-500 opacity-0 animate-fade-in">
-          Feedback Platform
-        </span>
-      </div>
+      {renderBrandText()}
     </div>
   );
 };

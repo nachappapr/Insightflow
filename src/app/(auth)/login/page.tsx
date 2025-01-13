@@ -7,8 +7,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import SignUpPatternImage from "../../../../public/images/auth/signup-bg.png";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -121,12 +123,14 @@ export default function LoginPage() {
 
       {/* Right side - Decorative Background */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/images/auth/signup-bg.png')",
-          }}
-        ></div>
+        <Image
+          src={SignUpPatternImage}
+          alt="signup-pattern"
+          placeholder="blur"
+          layout="fill"
+          objectFit="cover"
+          sizes="50vw"
+        />
         {/* Multiple Overlays for better text visibility */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/40 via-purple-900/60 to-black/80"></div>
         <div className="absolute inset-0 bg-black/20"></div>
