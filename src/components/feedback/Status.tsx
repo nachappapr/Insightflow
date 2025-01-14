@@ -8,7 +8,6 @@ type StatusProps = {
 };
 
 const Status = ({ name, count }: StatusProps) => {
-  console.log(name, count);
   return (
     <div className="flex justify-between w-full body-one-text text-text-secondary capitalize">
       <div className="flex gap-4 justify-center items-center">

@@ -22,12 +22,16 @@ const buttonVariants = cva(
         link: "text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50",
         primaryAction:
           "bg-brand-secondary text-neutral-50 shadow hover:bg-accent-purple dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 transition-hover duration-300 ease-smooth",
+        sort: "bg-navy text-neutral-50 shadow hover:bg-accent-purple dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 transition-hover duration-300 ease-smooth shadow-none",
+        badge:
+          "bg-background-secondary text-brand-primary  text-[0.813rem] leading-[1.188rem] font-semibold   focus:ring-0 focus:ring-transparent focus:ring-offset-0 hover:bg-accent-blue focus:bg-brand-primary focus:text-white border border-neutral-200 transition-all duration-250 ease-smooth",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
+        xs: "px-2.5 py-0.5 text-xs",
       },
     },
     defaultVariants: {

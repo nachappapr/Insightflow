@@ -1,13 +1,13 @@
 import { Categories } from "@/constants/feedback";
+import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Badge } from "../ui/badge";
 
 const CatagoriesCard = () => {
   const renderCategoriesBadge = () => {
     return Categories.map((category) => (
-      <Badge tabIndex={0} key={category} variant="category">
+      <Button size="xs" key={category} variant="badge">
         {category}
-      </Badge>
+      </Button>
     ));
   };
 

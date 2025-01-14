@@ -8,7 +8,7 @@
   }
   body {
     font-family: --var(font-jost);
-    @apply bg-background-primary;
+    @apply bg-background-primary text-text-secondary body1-regular;
   }
 }
 
@@ -97,10 +97,6 @@
 
   .animate-fade-in {
     animation: fade-in 0.5s ease-out forwards;
-  }
-
-  .hover-transistion {
-    transition: all 0.5s ease;
   }
 }
 
