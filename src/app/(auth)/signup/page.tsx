@@ -1,19 +1,38 @@
 "use client";
 
+import { signInWithMagicLink } from "@/actions/auth";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import AnimatedWaveLogo from "@/components/common/AnimatedWaveLogo";
-import GoogleIcon from "@/components/common/GoogleIcon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { signInWithMagicLinkSchema } from "@/schema/auth.schema";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState } from "react";
+import SignUpPatternImage from "../../../../public/images/auth/signup-bg.png";
 
 export default function SignupPage() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [lastResult, action, isPending] = useActionState(
+    signInWithMagicLink,
+    undefined
+  );
+  const [form, fields] = useForm({
+    lastResult,
+
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: signInWithMagicLinkSchema });
+    },
+
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-white">
       {/* Left side - Signup Form */}
       <div className="w-full lg:w-1/2 flex flex-col p-8 lg:p-16">
         <div className="flex items-center gap-2 mb-16">
@@ -32,91 +51,48 @@ export default function SignupPage() {
             Start collecting valuable feedback for your projects
           </p>
 
-          <form className="space-y-6">
-            {/* Full Name field */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="John"
-                  className="h-12"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Doe"
-                  className="h-12"
-                  required
-                />
-              </div>
-            </div>
-
+          <form
+            className="space-y-6"
+            id={form.id}
+            onSubmit={form.onSubmit}
+            action={action}
+            noValidate
+          >
             {/* Email field */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"
                 type="email"
                 placeholder="name@example.com"
-                className="h-12"
-                required
+                key={fields.email.key}
+                name={fields.email.name}
+                defaultValue={fields.email.initialValue}
+                className={clsx("h-12", {
+                  "border-error border-solid focus:border-none":
+                    fields.email.errors?.length,
+                })}
               />
-            </div>
-
-            {/* Password field */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
-                  className="h-12 pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Must be at least 8 characters long
-              </p>
-            </div>
-
-            <Button className="w-full h-12 text-base" variant="primaryAction">
-              Create Account
-            </Button>
-
-            <div className="relative flex items-center">
-              <div className="flex-grow border-t border-gray-300" />
-              <span className="mx-4 text-xs uppercase text-muted-foreground">
-                Or Sign up with
+              <span className="body3-semibold !font-normal text-error">
+                {fields.email.errors?.[0]}
               </span>
-              <div className="flex-grow border-t border-gray-300" />
             </div>
 
             <Button
-              variant="outline"
-              className="w-full h-12 text-base font-normal"
+              className="w-full h-12 text-base"
+              variant="primaryAction"
+              disabled={isPending}
             >
-              <GoogleIcon />
-              Sign up with Google
+              Create Account
             </Button>
           </form>
+          <div className="relative flex items-center my-4">
+            <div className="flex-grow border-t border-gray-300" />
+            <span className="mx-4 text-xs uppercase text-muted-foreground">
+              Or Sign up with
+            </span>
+            <div className="flex-grow border-t border-gray-300" />
+          </div>
+          <GoogleSignInButton authType="signup" />
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?&nbsp;
@@ -132,13 +108,14 @@ export default function SignupPage() {
 
       {/* Right side - Decorative Background */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/images/auth/signup-bg.png')",
-          }}
-        ></div>
-
+        <Image
+          src={SignUpPatternImage}
+          alt="signup-pattern"
+          placeholder="blur"
+          layout="fill"
+          objectFit="cover"
+          sizes="50vw"
+        />
         {/* Multiple Overlays for better text visibility */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/40 via-purple-900/60 to-black/80"></div>
         <div className="absolute inset-0 bg-black/20"></div>

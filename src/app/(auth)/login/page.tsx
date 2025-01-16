@@ -1,22 +1,38 @@
 "use client";
 
+import { signInWithMagicLink } from "@/actions/auth";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import AnimatedWaveLogo from "@/components/common/AnimatedWaveLogo";
-import GoogleIcon from "@/components/common/GoogleIcon";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { signInWithMagicLinkSchema } from "@/schema/auth.schema";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState } from "react";
 import SignUpPatternImage from "../../../../public/images/auth/signup-bg.png";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [lastResult, action, isPending] = useActionState(
+    signInWithMagicLink,
+    undefined
+  );
+  const [form, fields] = useForm({
+    lastResult,
+
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: signInWithMagicLinkSchema });
+    },
+
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-white">
       {/* Left side - Login Form */}
       <div className="w-full lg:w-1/2 flex flex-col p-8 lg:p-16">
         <div className="flex items-center gap-2 mb-16">
@@ -34,80 +50,48 @@ export default function LoginPage() {
             Share ideas and collaborate with your community
           </p>
 
-          <form className="space-y-6">
+          <form
+            className="space-y-6"
+            id={form.id}
+            onSubmit={form.onSubmit}
+            action={action}
+            noValidate
+          >
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"
                 type="email"
                 placeholder="name@example.com"
-                className="h-12"
-                required
+                key={fields.email.key}
+                name={fields.email.name}
+                defaultValue={fields.email.initialValue}
+                className={clsx("h-12", {
+                  "border-error border-solid focus:border-none":
+                    fields.email.errors?.length,
+                })}
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="h-12 pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
-                <label
-                  htmlFor="remember"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Remember me
-                </label>
-              </div>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-primary hover:underline hover:text-brand-secondary transition-hover duration-250 ease-smooth"
-              >
-                Forgot your password?
-              </Link>
-            </div>
-
-            <Button className="w-full h-12 text-base " variant="primaryAction">
-              Log In
-            </Button>
-
-            <div className="relative flex items-center">
-              <div className="flex-grow border-t border-gray-300" />
-              <span className="mx-4 text-xs uppercase text-muted-foreground">
-                Or Login with
+              <span className="body3-semibold !font-normal text-error">
+                {fields.email.errors?.[0]}
               </span>
-              <div className="flex-grow border-t border-gray-300" />
             </div>
 
             <Button
-              variant="outline"
-              className="w-full h-12 text-base font-normal"
+              className="w-full h-12 text-base "
+              variant="primaryAction"
+              type="submit"
+              disabled={isPending}
             >
-              <GoogleIcon />
-              Sign up with Google
+              Log In
             </Button>
           </form>
+          <div className="relative flex items-center my-4">
+            <div className="flex-grow border-t border-gray-300" />
+            <span className="mx-4 text-xs uppercase text-muted-foreground">
+              Or Login with
+            </span>
+            <div className="flex-grow border-t border-gray-300" />
+          </div>
+          <GoogleSignInButton authType="signin" />
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?&nbsp;
