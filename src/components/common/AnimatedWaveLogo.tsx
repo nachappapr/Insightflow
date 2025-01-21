@@ -1,24 +1,38 @@
+import clsx from "clsx";
+
 type AnimatedWaveLogoProps = {
   size?: number;
   isBrandTextRequired?: boolean;
+  variant?: "primary" | "secondary";
 };
 
 const AnimatedWaveLogo = ({
   size = 48,
   isBrandTextRequired = true,
+  variant = "primary",
 }: AnimatedWaveLogoProps) => {
   const renderBrandText = () => {
     if (!isBrandTextRequired) return null;
 
     return (
-      <div className="flex flex-col">
+      <div className="hidden md:flex flex-col">
         <span
-          className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent
-                       animate-gradient-x"
+          className={clsx(
+            "text-2xl font-bold bg-clip-text text-transparent animate-gradient-x",
+            "text-2xl font-bold text-transparent bg-clip-text",
+            variant === "secondary"
+              ? "bg-gradient-to-r from-background-secondary to-background-primary"
+              : "bg-gradient-to-r from-brand-secondary to-brand-primary",
+            "animate-gradient-x"
+          )}
         >
           InsightFlow
         </span>
-        <span className="text-sm text-gray-500 opacity-0 animate-fade-in">
+        <span
+          className={clsx("text-sm text-gray-500 opacity-0 animate-fade-in", {
+            hidden: variant === "secondary",
+          })}
+        >
           Feedback Platform
         </span>
       </div>

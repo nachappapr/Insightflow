@@ -72,16 +72,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           include: { accounts: true },
         });
 
-        // Check if the user has an existing account with a different provider
-        if (
-          existingUser &&
-          existingUser.accounts.length > 0 &&
-          account &&
-          existingUser.accounts[0].provider !== account.provider
-        ) {
-          throw new Error("OAuthAccountNotLinked");
-        }
-
         if (existingUser) {
           // Username already exists, append a random number
           user.username = `${username}${Math.floor(Math.random() * 1000)}`;

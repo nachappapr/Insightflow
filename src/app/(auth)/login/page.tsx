@@ -1,6 +1,7 @@
 "use client";
 
 import { signInWithMagicLink } from "@/actions/auth";
+import { AuthErrorBanner } from "@/components/auth/AuthErrorBanner";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import AnimatedWaveLogo from "@/components/common/AnimatedWaveLogo";
 import { Button } from "@/components/ui/button";
@@ -129,6 +130,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <AuthErrorBanner />
     </div>
   );
 }

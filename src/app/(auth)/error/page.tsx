@@ -8,9 +8,11 @@ interface AuthErrorPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default function AuthErrorPage({ searchParams }: AuthErrorPageProps) {
-  const error =
-    typeof searchParams.error === "string" ? searchParams.error : "Default";
+export default async function AuthErrorPage({
+  searchParams,
+}: AuthErrorPageProps) {
+  const { error } = await searchParams;
+  const errorType = typeof error === "string" ? error : "Default";
 
   const errorMessages: Record<string, string> = {
     Configuration: "There is a problem with the server configuration.",
@@ -22,7 +24,7 @@ export default function AuthErrorPage({ searchParams }: AuthErrorPageProps) {
       "The email address is already associated with another account. Please sign in using the original method you used to create your account.",
   };
 
-  const errorMessage = errorMessages[error] || errorMessages.Default;
+  const errorMessage = errorMessages[errorType] || errorMessages.Default;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#f7f8fd]">

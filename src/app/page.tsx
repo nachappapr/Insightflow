@@ -1,16 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { signOut } from "../../auth";
+import FeaturesSection from "@/components/landing/Features";
+import { Footer } from "@/components/landing/Footer";
+import Header from "@/components/landing/Header";
+import Hero from "@/components/landing/Hero";
+import ProductShowcase from "@/components/landing/ProductShowcase";
+import Testimonials from "@/components/landing/Testimonials";
 
 export default function Home() {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
-    >
-      <h1>Hello World</h1>
-      <Button type="submit">Logout</Button>
-    </form>
+    <>
+      <Header />
+      <Hero />
+      <ProductShowcase />
+      <FeaturesSection />
+      <Testimonials />
+      <Footer />
+    </>
   );
 }

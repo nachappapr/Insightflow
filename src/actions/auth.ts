@@ -17,7 +17,7 @@ export const signInWithMagicLink = async (
   }
 
   await signIn("resend", formData, {
-    redirect: "/",
+    redirectTo: "/",
   });
 };
 
