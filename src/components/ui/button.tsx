@@ -27,6 +27,9 @@ const buttonVariants = cva(
           "bg-background-secondary text-brand-primary  text-[0.813rem] leading-[1.188rem] font-semibold   focus:ring-0 focus:ring-transparent focus:ring-offset-0 hover:bg-accent-blue focus:bg-brand-primary focus:text-white border border-neutral-200 transition-all duration-250 ease-smooth",
         secondaryAction:
           "bg-brand-primary text-neutral-50 shadow hover:bg-accent-indigo dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 transition-hover duration-300 ease-smooth",
+        "tertiary-action":
+          "bg-text-primary text-white shadow hover:bg-text-secondary dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 transition-hover duration-300 ease-smooth",
+        "back-link": "text-neutral-900 link-underline",
       },
       size: {
         default: "h-9 px-4 py-2",

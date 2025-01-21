@@ -64,7 +64,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === "google" || account?.provider === "github") {
+      if (
+        account?.provider === "google" ||
+        account?.provider === "github" ||
+        account?.provider === "resend"
+      ) {
         const username = profile?.email?.split("@")[0] || "";
         // Check if username already exists
         const existingUser = await prisma.user.findUnique({

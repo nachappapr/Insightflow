@@ -4,4 +4,5 @@ export const APP_ROUTES = {
   FEEDBACK: "/feedback",
   LOGIN: "/login",
   SIGNUP: "/signup",
+  CREATE_FEEDBACK: "/feedback/create",
 };

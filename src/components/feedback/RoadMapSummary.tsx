@@ -1,14 +1,13 @@
 import { APP_ROUTES } from "@/constants/endpoint";
+import { getAllStatuses } from "@/data/feedback.data";
 import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
 import Status from "./Status";
-import { Statuses } from "@/constants/feedback";
 
-const RoadMapSummary = () => {
+const RoadMapSummary = async () => {
+  const statuses = await getAllStatuses();
   const renderStatus = () => {
-    return Statuses?.map((status, index) => (
-      <Status key={index} name={status} count={0} />
-    ));
+    return statuses?.map((status) => <Status key={status.id} {...status} />);
   };
 
   return (

@@ -4,9 +4,16 @@ import CatagoriesCard from "@/components/feedback/CatagoriesCard";
 import FeedbackCard from "@/components/feedback/FeedbackCard";
 import FeedbackHeader from "@/components/feedback/FeedbackHeader";
 import RoadMapSummary from "@/components/feedback/RoadMapSummary";
-import { mockFeedback } from "@/constants/feedback";
+import { getAllFeedback } from "@/data/feedback.data";
+import { auth } from "../../../auth";
 
-export function Dashboard() {
+export async function Dashboard() {
+  const session = await auth();
+  const user = session?.user ?? null;
+  const userId = user?.id;
+
+  const feedbackList = userId ? await getAllFeedback(userId) : [];
+
   return (
     <LayoutContainer>
       <div className="flex gap-8">
@@ -18,9 +25,9 @@ export function Dashboard() {
         <div className="flex-grow">
           <FeedbackHeader />
           <div className="mt-6 flex flex-col gap-4">
-            <FeedbackCard item={mockFeedback[0]} />
-            <FeedbackCard item={mockFeedback[0]} />
-            <FeedbackCard item={mockFeedback[0]} />
+            {feedbackList.map((item) => (
+              <FeedbackCard key={item.id} item={item} />
+            ))}
           </div>
         </div>
       </div>

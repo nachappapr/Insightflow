@@ -4,6 +4,7 @@ import { signInWithMagicLink } from "@/actions/auth";
 import { AuthErrorBanner } from "@/components/auth/AuthErrorBanner";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import AnimatedWaveLogo from "@/components/common/AnimatedWaveLogo";
+import FormError from "@/components/forms/FormError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,11 +60,11 @@ export default function LoginPage() {
             noValidate
           >
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor={fields.email.id}>Email</Label>
               <Input
                 type="email"
                 placeholder="name@example.com"
-                key={fields.email.key}
+                id={fields.email.id}
                 name={fields.email.name}
                 defaultValue={fields.email.initialValue}
                 className={clsx("h-12", {
@@ -71,9 +72,7 @@ export default function LoginPage() {
                     fields.email.errors?.length,
                 })}
               />
-              <span className="body3-semibold !font-normal text-error">
-                {fields.email.errors?.[0]}
-              </span>
+              <FormError errors={fields.email.errors} />
             </div>
 
             <Button

@@ -18,7 +18,7 @@ const ArrowUpIcon = ({ className }: VoteArrowProps) => {
         stroke="#4661E6"
         strokeWidth="2"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       />
     </svg>
   );

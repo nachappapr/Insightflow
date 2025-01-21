@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { getAllFeedback } from "@/data/feedback.data";
 import clsx from "clsx";
 import { ArrowUp, Clock } from "lucide-react";
 import { useState } from "react";
@@ -10,23 +11,10 @@ import { Badge } from "../ui/badge";
 
 type VoteStatus = "up" | "down" | null;
 
-interface FeedbackItem {
-  id: number;
-  title: string;
-  description: string;
-  votes: number;
-  author: {
-    name: string;
-    avatar: string;
-    initials: string;
-  };
-  timeAgo: string;
-  type: string;
-  comments: number;
-}
+type FeedbackItem = Awaited<ReturnType<typeof getAllFeedback>>[0];
 
 function FeedbackCard({ item }: { item: FeedbackItem }) {
-  const [votes, setVotes] = useState(item.votes);
+  const [votes, setVotes] = useState(item.numberOfLikes);
   const [voteStatus, setVoteStatus] = useState<VoteStatus>(null);
 
   const handleVote = (direction: "up" | "down") => {
@@ -65,7 +53,7 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
           onClick={() => handleVote("up")}
         >
           <ArrowUp />
-          <span>{item.votes}</span>
+          <span>{item?.numberOfLikes}</span>
         </Button>
 
         {/* Content */}
@@ -74,16 +62,16 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Avatar className="w-6 h-6">
-                <AvatarImage src={item.author.avatar} alt={item.author.name} />
-                <AvatarFallback>{item.author.initials}</AvatarFallback>
+                <AvatarImage src={""} alt={item.user.name ?? ""} />
+                <AvatarFallback>{item.user.name}</AvatarFallback>
               </Avatar>
               <span className="h4-bold text-text-primary">
-                {item.author.name}
+                {item.user.name}
               </span>
             </div>
             <span className="text-sm text-slate-500 flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              {item.timeAgo}
+              {/* {item.createdAt} */}
             </span>
           </div>
 
@@ -99,9 +87,12 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
               <Badge
                 tabIndex={0}
                 variant="category"
-                className="pointer-events-none"
+                className={clsx("capitalize", {
+                  uppercase: item.category.name.length <= 2,
+                  capitalize: item.category.name.length > 2,
+                })}
               >
-                {item.type}
+                {item.category.name}
               </Badge>
             </div>
             <div className="flex items-center gap-1 text-text-primary">
@@ -109,10 +100,10 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
                 <path
                   d="M2.62 16H1.346l.902-.91c.486-.491.79-1.13.872-1.823C1.036 11.887 0 9.89 0 7.794 0 3.928 3.52 0 9.03 0 14.87 0 18 3.615 18 7.455c0 3.866-3.164 7.478-8.97 7.478-1.017 0-2.078-.137-3.025-.388A4.705 4.705 0 012.62 16z"
                   fill="#CDD2EE"
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                 />
               </svg>
-              <span className="font-bold">{item.comments}</span>
+              <span className="font-bold">{item.comments?.length}</span>
             </div>
           </div>
         </div>

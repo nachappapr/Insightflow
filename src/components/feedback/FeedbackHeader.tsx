@@ -1,4 +1,6 @@
+import { APP_ROUTES } from "@/constants/endpoint";
 import { Lightbulb, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import FeedbackSort from "./FeedbackSort";
 
@@ -14,7 +16,7 @@ const FeedbackHeader = () => {
       </div>
       <Button variant="primaryAction">
         <PlusIcon size={16} />
-        Add Feedback
+        <Link href={APP_ROUTES.CREATE_FEEDBACK}>Add Feedback</Link>
       </Button>
     </div>
   );
