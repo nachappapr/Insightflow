@@ -52,3 +52,18 @@ export const getAllStatuses = async () => {
     numberOfFeedback: _count.feedbacks,
   }));
 };
+
+export const getFeedbackById = async (id: string) => {
+  return await prisma.feedback.findUnique({
+    where: { id: id },
+    select: {
+      id: true,
+      title: true,
+      category: { select: { name: true, id: true } },
+      description: true,
+      status: { select: { name: true, id: true } },
+      createdAt: true,
+      user: { select: { name: true, email: true } },
+    },
+  });
+};

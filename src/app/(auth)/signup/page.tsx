@@ -1,6 +1,6 @@
 "use client";
 
-import { signInWithMagicLink } from "@/actions/auth";
+import { signInWithMagicLink } from "@/actions/auth.action";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import AnimatedWaveLogo from "@/components/common/AnimatedWaveLogo";
 import { Button } from "@/components/ui/button";

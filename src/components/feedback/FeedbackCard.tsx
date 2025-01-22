@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { getAllFeedback } from "@/data/feedback.data";
 import clsx from "clsx";
 import { ArrowUp, Clock } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 
@@ -76,8 +77,9 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
           </div>
 
           {/* Title and Description */}
+
           <h3 className="h3-bold text-text-primary mb-1 hover:text-brand-primary transition-hover duration-250 ease-smooth cursor-pointer truncate">
-            {item.title}
+            <Link href={`/feedback/${item.id}`}>{item.title}</Link>
           </h3>
           <p className="text-text-secondary mb-4">{item.description}</p>
 

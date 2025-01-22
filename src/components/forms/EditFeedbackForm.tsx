@@ -1,8 +1,9 @@
 "use client";
 
-import { createFeedback } from "@/actions/feedback.action";
+import { editFeedback } from "@/actions/feedback.action";
 import { FeedbackSchema } from "@/schema/feedback.schema";
 import type {
+  Feedback,
   FeedbackCategories,
   FeedbackStatus,
 } from "@/types/feedback.types";
@@ -10,27 +11,30 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
 import { useActionState } from "react";
-import NewFeedbackIcon from "../icons/NewFeedbackIcon";
+import EditFeedbackIcon from "../icons/EditFeedbackIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { SelectConform } from "./ConformSelect";
+import DeleteForm from "./DeleteForm";
 import FormError from "./FormError";
 
-type CreateFeedbackFormProps = {
-  title: string;
+type EditFeedbackFormProps = {
   categories: FeedbackCategories[];
   statuses: FeedbackStatus[];
+  feedback: Feedback;
 };
 
-const CreateFeedbackForm = ({
-  title,
+const EditFeedbackForm = ({
   categories,
   statuses,
-}: CreateFeedbackFormProps) => {
+  feedback,
+}: EditFeedbackFormProps) => {
+  const { id, title, description, status, category } = feedback || {};
+  const editFeedbackAction = editFeedback.bind(null, feedback?.id);
   const [lastResult, action, isPending] = useActionState(
-    createFeedback,
+    editFeedbackAction,
     undefined
   );
 
@@ -41,14 +45,22 @@ const CreateFeedbackForm = ({
     },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
+    defaultValue: {
+      title: title,
+      description: description,
+      status: status?.id,
+      category: category?.id,
+    },
   });
+
+  const formTitle = `Editing ${title}`;
   return (
     <div className="bg-white rounded-lg relative mt-10">
       <div className="absolute top-[-26px] left-6">
-        <NewFeedbackIcon />
+        <EditFeedbackIcon />
       </div>
       <div className="p-10">
-        <h1 className="h1-bold text-text-primary mb-6">{title}</h1>
+        <h1 className="h1-bold text-text-primary mb-6">{formTitle}</h1>
         <form
           id={form.id}
           onSubmit={form.onSubmit}
@@ -153,34 +165,33 @@ const CreateFeedbackForm = ({
                 "border-error border-solid focus:border-none":
                   fields.description.errors?.length,
               })}
+              defaultValue={fields.title.initialValue}
             />
             <FormError
               errors={fields.description.errors}
               errorId={fields.description.id}
             />
           </div>
-          <div>
-            <div className="flex flex-col-reverse justify-center gap-4 mt-4 md:flex-row md:justify-end">
-              <Button
-                variant="tertiary-action"
-                type="reset"
-                disabled={isPending}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primaryAction"
-                type="submit"
-                disabled={isPending}
-              >
-                Add Feedback
-              </Button>
-            </div>
-          </div>
         </form>
+        <div className="flex justify-between items-center mt-4">
+          <DeleteForm feedbackId={id} />
+          <div className="flex flex-col-reverse justify-center gap-4 mt-4 md:flex-row md:justify-end">
+            <Button variant="tertiary-action" type="reset" disabled={isPending}>
+              Cancel
+            </Button>
+            <Button
+              variant="primaryAction"
+              type="submit"
+              disabled={isPending}
+              form={form.id}
+            >
+              Save Changes
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default CreateFeedbackForm;
+export default EditFeedbackForm;

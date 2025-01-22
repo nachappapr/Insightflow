@@ -1,4 +1,4 @@
-import { signInWithProvider } from "@/actions/auth";
+import { signInWithProvider } from "@/actions/auth.action";
 import { providerMap } from "../../../auth";
 import GithubIcon from "../common/GithubIcon";
 import GoogleIcon from "../common/GoogleIcon";
