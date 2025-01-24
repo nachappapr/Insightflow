@@ -53,8 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             );
           }
 
-          const result = await response.json();
-          console.log("Email sent successfully:", result);
+          await response.json();
         } catch (error) {
           console.error("Failed to send verification email:", error);
           throw new Error("Failed to send verification email");

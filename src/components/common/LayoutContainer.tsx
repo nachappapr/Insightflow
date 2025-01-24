@@ -8,7 +8,9 @@ type LayoutContainerProps = {
 
 const LayoutContainer = ({ children, className }: LayoutContainerProps) => {
   return (
-    <div className={clsx("max-w-6xl mx-auto md:mt-14 lg:mt-24", className)}>
+    <div
+      className={clsx("max-w-6xl mx-auto my-8 md:my-14 lg:my-24", className)}
+    >
       {children}
     </div>
   );

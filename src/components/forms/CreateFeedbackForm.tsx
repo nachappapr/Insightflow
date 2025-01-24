@@ -10,6 +10,7 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
 import { useActionState } from "react";
+import AnimatedButton from "../common/AnimatedButton";
 import NewFeedbackIcon from "../icons/NewFeedbackIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -72,12 +73,15 @@ const CreateFeedbackForm = ({
               id={fields.title.id}
               name={fields.title.name}
               defaultValue={fields.title.initialValue}
-              className={clsx("h-12", {
+              className={clsx({
                 "border-error border-solid focus:border-none":
                   fields.title.errors?.length,
               })}
             />
-            <FormError errors={fields.title.errors} errorId={fields.title.id} />
+            <FormError
+              errors={fields.title.errors}
+              errorId={fields.title.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1">
@@ -102,7 +106,7 @@ const CreateFeedbackForm = ({
             />
             <FormError
               errors={fields.category.errors}
-              errorId={fields.category.id}
+              errorId={fields.category.errorId}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -127,7 +131,7 @@ const CreateFeedbackForm = ({
             />
             <FormError
               errors={fields.status.errors}
-              errorId={fields.status.id}
+              errorId={fields.status.errorId}
             />
             <div className="pt-4">
               <FormError errors={form.errors} errorId={form.errorId} />
@@ -147,9 +151,10 @@ const CreateFeedbackForm = ({
               </small>
             </div>
             <Textarea
+              rows={6}
               id={fields.description.id}
               name={fields.description.name}
-              className={clsx("h-12", {
+              className={clsx({
                 "border-error border-solid focus:border-none":
                   fields.description.errors?.length,
               })}
@@ -168,13 +173,14 @@ const CreateFeedbackForm = ({
               >
                 Cancel
               </Button>
-              <Button
+              <AnimatedButton
+                title="Add Feedback"
                 variant="primaryAction"
-                type="submit"
+                isPending={isPending}
                 disabled={isPending}
-              >
-                Add Feedback
-              </Button>
+                type="submit"
+                className="w-full"
+              />
             </div>
           </div>
         </form>

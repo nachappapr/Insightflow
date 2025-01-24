@@ -8,4 +8,6 @@ export const errorMessages = {
   unauthorized_feedback_edit: "You are not authorized to edit this feedback",
   unauthorized_feedback_delete:
     "You are not authorized to delete this feedback",
+  resource_not_found: "The requested resource was not found",
+  already_voted: "You have already voted for this feedback",
 };

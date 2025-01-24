@@ -10,7 +10,7 @@ const CreateFeedbackPage = async () => {
   const categories = await getAllCategories();
   const statuses = await getAllStatuses();
   return (
-    <LayoutContainer className="max-w-4xl">
+    <LayoutContainer className="form-width">
       <Button variant="link" className="h4-bold text-text-primary">
         <ChevronLeft size={24} stroke="#4661E6" />
         <Link href={APP_ROUTES.DASHBOARD}> Go back</Link>

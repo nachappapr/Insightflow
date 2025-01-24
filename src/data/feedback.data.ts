@@ -54,7 +54,52 @@ export const getAllStatuses = async () => {
 };
 
 export const getFeedbackById = async (id: string) => {
-  return await prisma.feedback.findUnique({
+  // Define recursive comment selection structure
+  const commentSelect = {
+    id: true,
+    content: true,
+    createdAt: true,
+    updatedAt: true,
+    user: {
+      select: {
+        name: true,
+        email: true,
+        id: true,
+      },
+    },
+  } as const;
+
+  // Create type to allow recursive selection
+  type CommentSelect = typeof commentSelect & {
+    replies?: {
+      select: CommentSelect;
+    };
+  };
+
+  // Build the recursive selection
+  const fullCommentSelect: CommentSelect = {
+    ...commentSelect,
+    replies: {
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        replies: {
+          select: commentSelect,
+        },
+      },
+    },
+  };
+
+  const response = await prisma.feedback.findUnique({
     where: { id: id },
     select: {
       id: true,
@@ -63,7 +108,48 @@ export const getFeedbackById = async (id: string) => {
       description: true,
       status: { select: { name: true, id: true } },
       createdAt: true,
-      user: { select: { name: true, email: true } },
+      user: { select: { name: true, email: true, id: true } },
+      comments: {
+        where: {
+          parentId: null, // Only get top-level comments
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+        select: {
+          ...fullCommentSelect,
+          replies: {
+            orderBy: {
+              createdAt: "asc",
+            },
+            select: {
+              ...fullCommentSelect,
+              replies: {
+                orderBy: {
+                  createdAt: "asc",
+                },
+                select: fullCommentSelect,
+              },
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
     },
   });
+
+  if (!response) return null;
+
+  const updatedResponse = {
+    ...response,
+    numberOfLikes: response._count.likes,
+    numberOfComments: response._count.comments,
+  };
+
+  return updatedResponse;
 };

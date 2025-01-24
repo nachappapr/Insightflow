@@ -67,7 +67,7 @@ export default function LoginPage() {
                 id={fields.email.id}
                 name={fields.email.name}
                 defaultValue={fields.email.initialValue}
-                className={clsx("h-12", {
+                className={clsx({
                   "border-error border-solid focus:border-none":
                     fields.email.errors?.length,
                 })}

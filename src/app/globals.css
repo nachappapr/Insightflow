@@ -123,6 +123,14 @@
   .transition-normal {
     @apply transition-hover duration-300 ease-smooth;
   }
+
+  .card {
+    @apply bg-white text-text-secondary;
+  }
+
+  .form-width {
+    @apply w-11/12 max-w-xl md:max-w-2xl lg:max-w-3xl;
+  }
 }
 
 @layer components {
@@ -143,5 +151,21 @@
 
   .link-underline:hover::after {
     width: 100%;
+  }
+
+  .comment-thread {
+    position: relative;
+  }
+
+  .comment-thread::after {
+    content: "";
+    position: absolute;
+    left: 2rem;
+    top: 4rem;
+    width: 1px;
+    height: "100%";
+    height: calc(100% - 6rem);
+    background-color: red;
+    border: none;
   }
 }

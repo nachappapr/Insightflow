@@ -1,60 +1,78 @@
 "use client";
 
+import { addVotes } from "@/actions/feedback.action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getAllFeedback } from "@/data/feedback.data";
+import { FeedbackItemType } from "@/types/feedback.types";
 import clsx from "clsx";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { ArrowUp, Clock } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import { Badge } from "../ui/badge";
+import toast from "react-hot-toast";
 
-type VoteStatus = "up" | "down" | null;
+dayjs.extend(relativeTime);
 
-type FeedbackItem = Awaited<ReturnType<typeof getAllFeedback>>[0];
+type FeedbackCardProps = {
+  item: FeedbackItemType;
+  disableLink?: boolean;
+};
 
-function FeedbackCard({ item }: { item: FeedbackItem }) {
-  const [votes, setVotes] = useState(item.numberOfLikes);
-  const [voteStatus, setVoteStatus] = useState<VoteStatus>(null);
+function FeedbackCard({ item, disableLink }: FeedbackCardProps) {
+  const [hasVoted, setHasVoted] = useState(false);
+  const [optimisticLikes, setOptimisticLikes] = useOptimistic(
+    item.numberOfLikes
+  );
+  const [isPending, startTransition] = useTransition();
 
-  const handleVote = (direction: "up" | "down") => {
-    if (voteStatus === direction) {
-      setVotes(direction === "up" ? votes - 1 : votes + 1);
-      setVoteStatus(null);
-    } else {
-      setVotes(
-        direction === "up"
-          ? voteStatus === "down"
-            ? votes + 2
-            : votes + 1
-          : voteStatus === "up"
-          ? votes - 2
-          : votes - 1
-      );
-      setVoteStatus(direction);
-    }
+  const handleVote = () => {
+    startTransition(async () => {
+      const optimisticValue = hasVoted ? -1 : 1;
+      setOptimisticLikes((prev) => prev + optimisticValue);
+      setHasVoted((prev) => !prev);
+
+      const result = await addVotes(item.id);
+      if (!result.success) {
+        setOptimisticLikes((prev) => prev - optimisticValue);
+        setHasVoted((prev) => !prev);
+        toast.error(result.message, {
+          duration: 3000,
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        });
+      } else {
+        setOptimisticLikes(result.votes);
+      }
+    });
   };
 
-  const getEngagementLevel = (votes: number) => {
-    if (votes >= 75) return { color: "bg-green-500", text: "High Priority" };
-    if (votes >= 40) return { color: "bg-blue-500", text: "Medium Priority" };
+  const getEngagementLevel = (optimisticLikes: number) => {
+    if (optimisticLikes >= 75)
+      return { color: "bg-green-500", text: "High Priority" };
+    if (optimisticLikes >= 40)
+      return { color: "bg-blue-500", text: "Medium Priority" };
     return { color: "bg-slate-500", text: "Under Evaluation" };
   };
 
-  const engagementStatus = getEngagementLevel(votes);
+  const engagementStatus = getEngagementLevel(optimisticLikes);
 
   return (
-    <Card className="w-full overflow-hidden shadow-none">
+    <Card className="w-full card overflow-hidden shadow-none">
       <div className="flex gap-4 p-4">
         {/* Vote Column */}
         <Button
           variant="badge"
           className="py-8 flex flex-col items-center justify-center gap-1 transition-hover duration-250 ease-smooth"
-          onClick={() => handleVote("up")}
+          disabled={isPending}
+          onClick={() => handleVote()}
         >
           <ArrowUp />
-          <span>{item?.numberOfLikes}</span>
+          <span>{optimisticLikes}</span>
         </Button>
 
         {/* Content */}
@@ -70,18 +88,25 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
                 {item.user.name}
               </span>
             </div>
-            <span className="text-sm text-slate-500 flex items-center gap-1">
+            <span className="text-sm flex items-center gap-1">
+              {dayjs(item.createdAt).fromNow()}
               <Clock className="w-3 h-3" />
-              {/* {item.createdAt} */}
             </span>
           </div>
 
           {/* Title and Description */}
 
           <h3 className="h3-bold text-text-primary mb-1 hover:text-brand-primary transition-hover duration-250 ease-smooth cursor-pointer truncate">
-            <Link href={`/feedback/${item.id}`}>{item.title}</Link>
+            <Link
+              className={clsx({
+                "pointer-events-none": disableLink,
+              })}
+              href={`/feedback/${item.id}`}
+            >
+              {item.title}
+            </Link>
           </h3>
-          <p className="text-text-secondary mb-4">{item.description}</p>
+          <p className="mb-4">{item.description}</p>
 
           {/* Footer */}
           <div className="flex items-center justify-between">
@@ -89,7 +114,7 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
               <Badge
                 tabIndex={0}
                 variant="category"
-                className={clsx("capitalize", {
+                className={clsx("capitalize pointer-events-none", {
                   uppercase: item.category.name.length <= 2,
                   capitalize: item.category.name.length > 2,
                 })}
@@ -105,7 +130,7 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
                   fillRule="nonzero"
                 />
               </svg>
-              <span className="font-bold">{item.comments?.length}</span>
+              <span className="font-bold">{item.numberOfComments}</span>
             </div>
           </div>
         </div>
@@ -118,7 +143,7 @@ function FeedbackCard({ item }: { item: FeedbackItem }) {
             "h-full transition-all duration-300",
             engagementStatus.color
           )}
-          style={{ width: `${(votes / 100) * 100}%` }}
+          style={{ width: `${(optimisticLikes / 100) * 100}%` }}
         />
       </div>
     </Card>

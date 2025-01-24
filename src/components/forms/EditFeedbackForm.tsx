@@ -3,27 +3,28 @@
 import { editFeedback } from "@/actions/feedback.action";
 import { FeedbackSchema } from "@/schema/feedback.schema";
 import type {
-  Feedback,
   FeedbackCategories,
+  FeedbackItemType,
   FeedbackStatus,
 } from "@/types/feedback.types";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import AnimatedButton from "../common/AnimatedButton";
+import DeleteFeedbackDialog from "../feedback/DeleteFeedbackDialog";
 import EditFeedbackIcon from "../icons/EditFeedbackIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { SelectConform } from "./ConformSelect";
-import DeleteForm from "./DeleteForm";
 import FormError from "./FormError";
 
 type EditFeedbackFormProps = {
   categories: FeedbackCategories[];
   statuses: FeedbackStatus[];
-  feedback: Feedback;
+  feedback: FeedbackItemType;
 };
 
 const EditFeedbackForm = ({
@@ -32,7 +33,9 @@ const EditFeedbackForm = ({
   feedback,
 }: EditFeedbackFormProps) => {
   const { id, title, description, status, category } = feedback || {};
-  const editFeedbackAction = editFeedback.bind(null, feedback?.id);
+  const editFeedbackAction = editFeedback.bind(null, feedback.id);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [lastResult, action, isPending] = useActionState(
     editFeedbackAction,
     undefined
@@ -52,6 +55,10 @@ const EditFeedbackForm = ({
       category: category?.id,
     },
   });
+
+  const handleDeleteModal = () => {
+    setOpenDeleteModal((prev) => !prev);
+  };
 
   const formTitle = `Editing ${title}`;
   return (
@@ -84,12 +91,15 @@ const EditFeedbackForm = ({
               id={fields.title.id}
               name={fields.title.name}
               defaultValue={fields.title.initialValue}
-              className={clsx("h-12", {
+              className={clsx({
                 "border-error border-solid focus:border-none":
                   fields.title.errors?.length,
               })}
             />
-            <FormError errors={fields.title.errors} errorId={fields.title.id} />
+            <FormError
+              errors={fields.title.errors}
+              errorId={fields.title.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1">
@@ -114,7 +124,7 @@ const EditFeedbackForm = ({
             />
             <FormError
               errors={fields.category.errors}
-              errorId={fields.category.id}
+              errorId={fields.category.errorId}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -139,7 +149,7 @@ const EditFeedbackForm = ({
             />
             <FormError
               errors={fields.status.errors}
-              errorId={fields.status.id}
+              errorId={fields.status.errorId}
             />
             <div className="pt-4">
               <FormError errors={form.errors} errorId={form.errorId} />
@@ -159,9 +169,10 @@ const EditFeedbackForm = ({
               </small>
             </div>
             <Textarea
+              rows={6}
               id={fields.description.id}
               name={fields.description.name}
-              className={clsx("h-12", {
+              className={clsx({
                 "border-error border-solid focus:border-none":
                   fields.description.errors?.length,
               })}
@@ -169,27 +180,43 @@ const EditFeedbackForm = ({
             />
             <FormError
               errors={fields.description.errors}
-              errorId={fields.description.id}
+              errorId={fields.description.errorId}
             />
           </div>
         </form>
-        <div className="flex justify-between items-center mt-4">
-          <DeleteForm feedbackId={id} />
-          <div className="flex flex-col-reverse justify-center gap-4 mt-4 md:flex-row md:justify-end">
-            <Button variant="tertiary-action" type="reset" disabled={isPending}>
-              Cancel
-            </Button>
+        <div className="flex flex-col-reverse justify-between items-center md:flex-row md:justify-start mt-10 md:mt-8 gap-4 md:gap-0">
+          <Button
+            variant="danger"
+            className="w-full md:w-auto"
+            onClick={handleDeleteModal}
+          >
+            Delete
+          </Button>
+          <div className="flex flex-col-reverse md:flex-row md:justify-end gap-4 w-full">
             <Button
-              variant="primaryAction"
-              type="submit"
+              variant="tertiary-action"
+              type="reset"
               disabled={isPending}
               form={form.id}
             >
-              Save Changes
+              Cancel
             </Button>
+            <AnimatedButton
+              title="Save Changes"
+              variant="primaryAction"
+              type="submit"
+              isPending={isPending}
+              form={form.id}
+              className="w-full"
+            />
           </div>
         </div>
       </div>
+      <DeleteFeedbackDialog
+        feedbackId={id}
+        openDialog={openDeleteModal}
+        setOpenDialog={setOpenDeleteModal}
+      />
     </div>
   );
 };
