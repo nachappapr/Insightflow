@@ -11,8 +11,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { ArrowUp, Clock } from "lucide-react";
 import Link from "next/link";
 import { useOptimistic, useState, useTransition } from "react";
-import { Badge } from "../ui/badge";
 import toast from "react-hot-toast";
+import { Badge } from "../ui/badge";
 
 dayjs.extend(relativeTime);
 
@@ -63,11 +63,11 @@ function FeedbackCard({ item, disableLink }: FeedbackCardProps) {
 
   return (
     <Card className="w-full card overflow-hidden shadow-none">
-      <div className="flex gap-4 p-4">
+      <div className="flex flex-col-reverse md:flex-row gap-4 p-4">
         {/* Vote Column */}
         <Button
           variant="badge"
-          className="py-8 flex flex-col items-center justify-center gap-1 transition-hover duration-250 ease-smooth"
+          className="py-3 flex self-start md:py-8 md:flex-col items-center justify-center gap-1 transition-hover duration-250 ease-smooth"
           disabled={isPending}
           onClick={() => handleVote()}
         >

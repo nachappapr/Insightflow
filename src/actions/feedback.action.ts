@@ -136,7 +136,6 @@ export const editFeedback = async (
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${id}`);
-  redirect(`${APP_ROUTES.FEEDBACK}/${id}`);
 };
 
 export const deleteFeedback = async (
@@ -229,7 +228,6 @@ export const createComment = async (
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
-  redirect(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
 };
 
 export const createReply = async (
@@ -267,7 +265,6 @@ export const createReply = async (
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
-  redirect(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
 };
 
 export const editReply = async (
@@ -322,7 +319,6 @@ export const editReply = async (
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
-  redirect(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
 };
 
 export const deleteComment = async (prevState: unknown, formData: FormData) => {
@@ -371,7 +367,6 @@ export const deleteComment = async (prevState: unknown, formData: FormData) => {
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
-  redirect(`${APP_ROUTES.FEEDBACK}/${feedbackId}`);
 };
 
 export const addVotes = async (feedbackId: string) => {

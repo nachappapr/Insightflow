@@ -2,30 +2,44 @@
 
 import { prisma } from "../../prisma";
 
+export const getFeedbackCount = async () => {
+  return await prisma.feedback.count();
+};
+
 export const getAllFeedback = async (userId: string) => {
   const response = await prisma.feedback.findMany({
     where: { userId: userId },
     select: {
       id: true,
       title: true,
-      category: { select: { name: true } },
+      category: { select: { id: true, name: true } },
       description: true,
-      status: { select: { name: true } },
+      status: { select: { id: true, name: true } },
       createdAt: true,
-      user: { select: { name: true, email: true } },
+      user: { select: { id: true, name: true, email: true } },
       comments: {
         select: {
           id: true,
           content: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
         },
       },
-      _count: { select: { likes: true } },
+      _count: { select: { likes: true, comments: true } },
     },
   });
 
   return response.map(({ _count, ...rest }) => ({
     ...rest,
     numberOfLikes: _count.likes,
+    numberOfComments: _count.comments,
   }));
 };
 

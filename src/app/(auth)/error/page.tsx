@@ -5,7 +5,7 @@ import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 interface AuthErrorPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function AuthErrorPage({
