@@ -12,8 +12,8 @@ const DashboardHeader = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const handleSidebar = () => setOpenSidebar((prev) => !prev);
   return (
-    <div>
-      <header className="sticky top-0 isolate z-[1000] backdrop-blur-lg bg-[radial-gradient(166.82%_166.82%_at_103.9%_-10.39%,#E84D70_0%,#A337F6_53.09%,#28A7ED_100%)] md:bg-none md:bg-white/90 shadow-[0_4px_10px_rgba(124,58,237,0.15)]">
+    <div className="sticky top-0 z-[1000]">
+      <header className="backdrop-blur-lg bg-[radial-gradient(166.82%_166.82%_at_103.9%_-10.39%,#E84D70_0%,#A337F6_53.09%,#28A7ED_100%)] md:bg-none md:bg-white/90 shadow-[0_4px_10px_rgba(124,58,237,0.15)]">
         <div className="centered-layout">
           <div className="px-4 py-3 md:px-0 flex items-center justify-between">
             <div className="flex items-center gap-16">

@@ -4,8 +4,8 @@ import { editFeedback } from "@/actions/feedback.action";
 import { FeedbackSchema } from "@/schema/feedback.schema";
 import type {
   FeedbackCategories,
-  FeedbackItemType,
   FeedbackStatus,
+  FeedbackType,
 } from "@/types/feedback.types";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
@@ -24,7 +24,7 @@ import FormError from "./FormError";
 type EditFeedbackFormProps = {
   categories: FeedbackCategories[];
   statuses: FeedbackStatus[];
-  feedback: FeedbackItemType;
+  feedback: FeedbackType;
 };
 
 const EditFeedbackForm = ({

@@ -2,37 +2,57 @@
 
 import { prisma } from "../../prisma";
 
+type SortOption =
+  | "most upvotes"
+  | "least upvotes"
+  | "most comments"
+  | "least comments";
+
+type OrderByConfig = {
+  likes?: { _count: "desc" | "asc" };
+  comments?: { _count: "desc" | "asc" };
+};
+
 export const getFeedbackCount = async () => {
   return await prisma.feedback.count();
 };
 
-export const getAllFeedback = async (userId: string) => {
+export const getAllFeedbackDetails = async (
+  userId: string,
+  sortBy?: string
+) => {
+  const orderBy: Record<SortOption, OrderByConfig> = {
+    "most upvotes": { likes: { _count: "desc" } },
+    "least upvotes": { likes: { _count: "asc" } },
+    "most comments": { comments: { _count: "desc" } },
+    "least comments": { comments: { _count: "asc" } },
+  };
+
   const response = await prisma.feedback.findMany({
     where: { userId: userId },
+    orderBy: orderBy[sortBy as SortOption] ?? orderBy["most upvotes"],
     select: {
       id: true,
       title: true,
-      category: { select: { id: true, name: true } },
       description: true,
-      status: { select: { id: true, name: true } },
       createdAt: true,
-      user: { select: { id: true, name: true, email: true } },
-      comments: {
+      category: {
         select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          updatedAt: true,
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
+          name: true,
         },
       },
-      _count: { select: { likes: true, comments: true } },
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
     },
   });
 
@@ -41,6 +61,50 @@ export const getAllFeedback = async (userId: string) => {
     numberOfLikes: _count.likes,
     numberOfComments: _count.comments,
   }));
+};
+
+export const getFeedbackDetailsById = async (feedbackId: string) => {
+  const response = await prisma.feedback.findUnique({
+    where: { id: feedbackId },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      createdAt: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      status: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
+    },
+  });
+
+  if (!response) return null;
+
+  return {
+    ...response,
+    numberOfLikes: response._count.likes,
+    numberOfComments: response._count.comments,
+  };
 };
 
 export const getAllCategories = async () => {
@@ -67,7 +131,7 @@ export const getAllStatuses = async () => {
   }));
 };
 
-export const getFeedbackById = async (id: string) => {
+export const getFeedbackCommentsById = async (id: string) => {
   // Define recursive comment selection structure
   const commentSelect = {
     id: true,
@@ -116,13 +180,6 @@ export const getFeedbackById = async (id: string) => {
   const response = await prisma.feedback.findUnique({
     where: { id: id },
     select: {
-      id: true,
-      title: true,
-      category: { select: { name: true, id: true } },
-      description: true,
-      status: { select: { name: true, id: true } },
-      createdAt: true,
-      user: { select: { name: true, email: true, id: true } },
       comments: {
         where: {
           parentId: null, // Only get top-level comments

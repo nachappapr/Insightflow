@@ -11,7 +11,7 @@ const CommentListSkeleton = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {[1, 2, 3].map((index) => (
+        {[1].map((index) => (
           <div
             key={index}
             className="border-b border-text-light/25 last:border-b-0 mb-4"

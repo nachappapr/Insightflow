@@ -1,16 +1,18 @@
-import { APP_ROUTES } from "@/constants/endpoint";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 import LayoutContainer from "../common/LayoutContainer";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 import CreateFeedbackFormSkeleton from "./CreateFeedbackFormSkeleton";
 
 const CreateFeedbackFormWrapperSkeleton = () => {
   return (
     <LayoutContainer className="form-width">
-      <Button variant="link" className="h4-bold text-text-primary mb-4">
-        <ChevronLeft size={24} stroke="#4661E6" />
-        <Link href={APP_ROUTES.DASHBOARD}> Go back</Link>
+      <Button
+        variant="link"
+        className="h4-bold text-text-primary hover:text-text-secondary transition-fast"
+        disabled
+      >
+        <Skeleton className="w-6 h-6 mr-2" />
+        <Skeleton className="w-20 h-4" />
       </Button>
       <CreateFeedbackFormSkeleton />
     </LayoutContainer>

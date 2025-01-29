@@ -1,9 +1,9 @@
 export const SortOptions = [
-  "Most Upvotes",
-  "Least Upvotes",
-  "Most Comments",
-  "Least Comments",
-] as const;
+  "most upvotes",
+  "least upvotes",
+  "most comments",
+  "least comments",
+];
 
 export const testimonials = [
   {

@@ -5,7 +5,7 @@ import { APP_ROUTES } from "@/constants/endpoint";
 import {
   getAllCategories,
   getAllStatuses,
-  getFeedbackById,
+  getFeedbackDetailsById,
 } from "@/data/feedback.data";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -16,9 +16,10 @@ const EditFeedbackFormWrapper = async ({
 }: {
   feedbackId: string;
 }) => {
-  const feedback = await getFeedbackById(feedbackId);
+  const feedback = await getFeedbackDetailsById(feedbackId);
   const categories = await getAllCategories();
   const statuses = await getAllStatuses();
+
   if (!feedback) {
     notFound();
   }

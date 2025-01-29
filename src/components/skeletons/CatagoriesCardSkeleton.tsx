@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import { Card, CardContent } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
 
 const CategoriesCardSkeleton = () => {
   // Generate a random number of skeleton badges between 5 and 8
@@ -8,9 +10,12 @@ const CategoriesCardSkeleton = () => {
     <Card className="w-[15.9375rem] max-w-[15.9375rem] shadow-none">
       <CardContent className="flex flex-wrap gap-2 p-6">
         {[...Array(skeletonCount)].map((_, index) => (
-          <div
+          <Skeleton
             key={index}
-            className="h-6 w-16 bg-gray-200 rounded-full animate-pulse"
+            className={clsx("min-h-4 w-16 rounded-md", {
+              "w-12": index <= 3,
+              "w-28": index === 4,
+            })}
           />
         ))}
       </CardContent>

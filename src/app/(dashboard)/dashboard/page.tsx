@@ -9,15 +9,21 @@ import RoadMapSummarySkeleton from "@/components/skeletons/RoadMapSkeleton";
 import { Suspense } from "react";
 import { auth } from "../../../../auth";
 
-export async function Dashboard() {
+export async function Dashboard(props: {
+  searchParams?: Promise<{
+    sort?: string;
+  }>;
+}) {
   const session = await auth();
   const user = session?.user ?? null;
   const userId = user?.id;
-
+  const searchParams = await props.searchParams;
+  const query = searchParams?.sort;
+  // hidden md:block md:sticky top-28 self-start w-64 space-y-6
   return (
     <LayoutContainer className="relative">
       <div className="flex flex-col lg:flex-row gap-8">
-        <div className="hidden md:flex md:flex-row gap-2 lg:flex-col lg:gap-6">
+        <div className="hidden md:flex md:flex-row gap-2 lg:flex-col lg:gap-6 sticky top-28 md:justify-start lg:self-start">
           <BrandCard />
           <Suspense fallback={<CategoriesCardSkeleton />}>
             <CatagoriesCard />
@@ -27,8 +33,8 @@ export async function Dashboard() {
           </Suspense>
         </div>
         <div className="flex-grow">
-          <Suspense fallback={<FeedbackWrapperSkeleton />}>
-            <FeedbackWrapper userId={userId} />
+          <Suspense key={query} fallback={<FeedbackWrapperSkeleton />}>
+            <FeedbackWrapper userId={userId} query={query} />
           </Suspense>
         </div>
       </div>

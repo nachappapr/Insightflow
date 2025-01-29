@@ -4,7 +4,7 @@ import { addVotes } from "@/actions/feedback.action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FeedbackItemType } from "@/types/feedback.types";
+import { FeedbackType } from "@/types/feedback.types";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -17,7 +17,7 @@ import { Badge } from "../ui/badge";
 dayjs.extend(relativeTime);
 
 type FeedbackCardProps = {
-  item: FeedbackItemType;
+  item: FeedbackType;
   disableLink?: boolean;
 };
 

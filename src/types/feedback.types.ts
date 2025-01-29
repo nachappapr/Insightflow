@@ -21,18 +21,19 @@ export type CommentType = {
   replies?: CommentType[]; // Recursive type for nested replies
 };
 
-export type FeedbackItemType = {
-  id: string;
-  title: string;
-  category: { name: string; id: string };
-  description: string;
-  status: { name: string; id: string };
-  createdAt: Date;
-  user: User;
-  comments: CommentType[];
-  _count?: { likes: number; comments: number };
+export type FeedbackType = {
   numberOfLikes: number;
   numberOfComments: number;
+  user: {
+    name: string | null;
+    id: string;
+  };
+  id: string;
+  createdAt: Date;
+  title: string;
+  description: string;
+  category: { id: string; name: string };
+  status: { id: string; name: string };
 };
 
 export type AllFeedbackItemType = {

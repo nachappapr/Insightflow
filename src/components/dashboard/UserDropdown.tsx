@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { User, LogOut } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { APP_ROUTES } from "@/constants/endpoint";
 import useClickOutside from "@/hooks/useClickOutside";
+import { LogOut, User } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { APP_ROUTES } from "@/constants/endpoint";
+import { useRef, useState } from "react";
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);

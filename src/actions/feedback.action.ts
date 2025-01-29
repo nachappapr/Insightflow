@@ -136,6 +136,7 @@ export const editFeedback = async (
 
   // revalidate feedback page and redirect to feedback page
   revalidatePath(`${APP_ROUTES.FEEDBACK}/${id}`);
+  redirect(`${APP_ROUTES.FEEDBACK}/${id}`);
 };
 
 export const deleteFeedback = async (
