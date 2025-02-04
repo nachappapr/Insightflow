@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import BrandCard from "@/components/common/BrandCard";
 import LayoutContainer from "@/components/common/LayoutContainer";
 import FeedbackWrapper from "@/components/dashboard/FeedbackWrapper";
@@ -7,7 +8,6 @@ import CategoriesCardSkeleton from "@/components/skeletons/CatagoriesCardSkeleto
 import FeedbackWrapperSkeleton from "@/components/skeletons/FeedbackWrapperSkeleton";
 import RoadMapSummarySkeleton from "@/components/skeletons/RoadMapSkeleton";
 import { Suspense } from "react";
-import { auth } from "../../../../auth";
 
 export async function Dashboard(props: {
   searchParams?: Promise<{
@@ -15,11 +15,12 @@ export async function Dashboard(props: {
   }>;
 }) {
   const session = await auth();
+
   const user = session?.user ?? null;
   const userId = user?.id;
   const searchParams = await props.searchParams;
   const query = searchParams?.sort;
-  // hidden md:block md:sticky top-28 self-start w-64 space-y-6
+
   return (
     <LayoutContainer className="relative">
       <div className="flex flex-col lg:flex-row gap-8">

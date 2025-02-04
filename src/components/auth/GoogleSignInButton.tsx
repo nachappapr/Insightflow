@@ -1,5 +1,5 @@
 import { signInWithProvider } from "@/actions/auth.action";
-import { providerMap } from "../../../auth";
+import { providerMap } from "@/auth.config";
 import GithubIcon from "../common/GithubIcon";
 import GoogleIcon from "../common/GoogleIcon";
 import { Button } from "../ui/button";

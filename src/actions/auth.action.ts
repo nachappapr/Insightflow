@@ -1,8 +1,9 @@
 "use server";
 
+import { signIn, signOut } from "@/auth";
+import { APP_ROUTES } from "@/constants/endpoint";
 import { signInWithMagicLinkSchema } from "@/schema/auth.schema";
 import { parseWithZod } from "@conform-to/zod";
-import { signIn } from "../../auth";
 
 export const signInWithMagicLink = async (
   prevState: unknown,
@@ -17,7 +18,7 @@ export const signInWithMagicLink = async (
   }
 
   await signIn("resend", formData, {
-    redirectTo: "/",
+    redirectTo: APP_ROUTES.DASHBOARD,
   });
 };
 
@@ -30,6 +31,12 @@ export const signInWithProvider = async (
   _formData: FormData
 ) => {
   await signIn(provider.id, {
-    redirectTo: "/",
+    redirectTo: APP_ROUTES.DASHBOARD,
+  });
+};
+
+export const signOutAction = async () => {
+  await signOut({
+    redirectTo: APP_ROUTES.LOGIN,
   });
 };

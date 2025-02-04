@@ -1,17 +1,14 @@
 "use client";
 
-import { APP_ROUTES } from "@/constants/endpoint";
 import useClickOutside from "@/hooks/useClickOutside";
-import { LogOut, User } from "lucide-react";
+import { User } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import SignOutButton from "../forms/SignOutButton";
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
@@ -36,16 +33,7 @@ const UserDropdown = () => {
               <User className="mr-2 h-4 w-4 text-text-primary group-hover:text-brand-secondary font-medium" />
               <span>Profile</span>
             </button>
-            <button
-              className="px-4 py-2 hover:text-brand-secondary cursor-pointer flex items-center transition-fast group"
-              onClick={() => {
-                signOut();
-                router.push(APP_ROUTES.LOGIN);
-              }}
-            >
-              <LogOut className="mr-2 h-4 w-4 group-hover:text-brand-secondary group-hover:stroke-brand-secondary font-medium" />
-              <span>Log out</span>
-            </button>
+            <SignOutButton />
           </motion.div>
         )}
       </AnimatePresence>

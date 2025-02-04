@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/auth";
 import { APP_ROUTES } from "@/constants/endpoint";
 import { errorMessages } from "@/constants/messages";
 import {
@@ -10,9 +11,9 @@ import {
 import { Submission } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { isEmpty } from "lodash";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "../../auth";
 import { prisma } from "../../prisma";
 
 export async function handlePrismaError<TSchema>(
@@ -54,26 +55,26 @@ export const createFeedback = async (
   const submission = parseWithZod(formData, {
     schema: FeedbackSchema,
   });
-
   // redirect to login if user is not authenticated
-  if (user === null) return redirect(APP_ROUTES.LOGIN);
+  if (user === null || isEmpty(user?.id)) return redirect(APP_ROUTES.LOGIN);
 
   // reply with form errors if submission is not successful
   if (submission.status !== "success") return submission.reply();
 
   // create feedback
-  const { category, status, ...rest } = submission.value;
+  const { category, status, title, description } = submission.value;
   try {
     await prisma.feedback.create({
       data: {
-        ...rest,
+        title,
+        description,
         categoryId: category,
         statusId: status,
         userId: user.id as string,
       },
     });
   } catch (error) {
-    handlePrismaError(error, submission);
+    console.log("error", error);
   }
 
   // revalidate dashboard page and redirect to dashboard

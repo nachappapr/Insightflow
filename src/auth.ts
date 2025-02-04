@@ -1,30 +1,13 @@
-import MagicLinkEmail from "@/components/emails/magicLinkEmail";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
-import type { Provider } from "next-auth/providers";
-import Github from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
 import Resend from "next-auth/providers/resend";
-import { prisma } from "./prisma";
-
-const providers: Provider[] = [Google, Github];
-
-export const providerMap = providers
-  .map((provider) => {
-    if (typeof provider === "function") {
-      const providerData = provider();
-      return { id: providerData.id, name: providerData.name };
-    } else {
-      return { id: provider.id, name: provider.name };
-    }
-  })
-  .filter((provider) => provider.id !== "resend");
+import { prisma } from "../prisma";
+import authConfig from "./auth.config";
+import MagicLinkEmail from "./components/emails/magicLinkEmail";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
   providers: [
-    Google,
-    Github,
+    ...authConfig.providers,
     Resend({
       apiKey: process.env.RESEND_API_KEY,
       from: "noreply@bizsuite.org",
@@ -61,40 +44,45 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (
-        account?.provider === "google" ||
-        account?.provider === "github" ||
-        account?.provider === "resend"
-      ) {
-        const username = profile?.email?.split("@")[0] || "";
-        // Check if username already exists
-        const existingUser = await prisma.user.findUnique({
-          where: { username },
-          include: { accounts: true },
-        });
-
-        if (existingUser) {
-          // Username already exists, append a random number
-          user.username = `${username}${Math.floor(Math.random() * 1000)}`;
-        } else {
-          user.username = username;
-        }
-      }
-      return true;
-    },
+    ...authConfig.callbacks,
     async jwt({ token, user }) {
-      if (user?.username) {
+      if (user) {
+        token.id = user.id;
         token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token?.username) {
+      if (session.user && token) {
         session.user.username = token.username as string;
+        session.user.id = token.id as string;
       }
       return session;
+    },
+  },
+  events: {
+    async createUser({ user }) {
+      const usernameBase = user.email?.split("@")[0] || "user";
+      let username = usernameBase;
+
+      // Check if the base username already exists
+      const existingUser = await prisma.user.findUnique({
+        where: { username },
+      });
+
+      // Append a random number if the username is taken
+      if (existingUser) {
+        username = `${username}${Math.floor(Math.random() * 1000)}`;
+      }
+
+      // Update the user with the new username
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { username },
+      });
     },
   },
   pages: {
