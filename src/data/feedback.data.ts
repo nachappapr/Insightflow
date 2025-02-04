@@ -38,8 +38,12 @@ export const getAllFeedbackDetails = async (
       createdAt: true,
       category: {
         select: {
+          id: true,
           name: true,
         },
+      },
+      status: {
+        select: { id: true, name: true },
       },
       user: {
         select: {

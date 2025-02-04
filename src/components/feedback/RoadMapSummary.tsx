@@ -16,7 +16,6 @@ const RoadMapSummary = async () => {
         <div className="flex justify-between items-center">
           <h3 className="h3-bold text-text-primary">Roadmap</h3>
           <Link
-            prefetch={true}
             href={APP_ROUTES.ROADMAP}
             className="body1-regular text-brand-primary link-underline hover:text-brand-light"
           >

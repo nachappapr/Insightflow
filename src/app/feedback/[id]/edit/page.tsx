@@ -2,7 +2,7 @@ import EditFeedbackFormWrapper from "@/components/feedback/EditFeedbackFormWrapp
 import CreateFeedbackFormWrapperSkeleton from "@/components/skeletons/CreateFeedbackFormWrapperSkeleton";
 import { Suspense } from "react";
 
-const EditFeedbackPage = async (props: { params: { id: string } }) => {
+const EditFeedbackPage = async (props: { params: Promise<{ id: string }> }) => {
   const params = await props.params;
   const feedbackId = params.id;
 

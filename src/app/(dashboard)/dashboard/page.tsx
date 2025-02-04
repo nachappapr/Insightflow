@@ -9,7 +9,7 @@ import FeedbackWrapperSkeleton from "@/components/skeletons/FeedbackWrapperSkele
 import RoadMapSummarySkeleton from "@/components/skeletons/RoadMapSkeleton";
 import { Suspense } from "react";
 
-export async function Dashboard(props: {
+export default async function Dashboard(props: {
   searchParams?: Promise<{
     sort?: string;
   }>;
@@ -42,5 +42,3 @@ export async function Dashboard(props: {
     </LayoutContainer>
   );
 }
-
-export default Dashboard;
