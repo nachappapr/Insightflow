@@ -17,8 +17,10 @@ export const signInWithMagicLink = async (
     return submission.reply();
   }
 
+  const { callbackurl } = submission.value;
+
   await signIn("resend", formData, {
-    redirectTo: APP_ROUTES.DASHBOARD,
+    redirectTo: callbackurl ?? APP_ROUTES.DASHBOARD,
   });
 };
 
@@ -27,16 +29,15 @@ export const signInWithProvider = async (
     name: string;
     id: string;
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _formData: FormData
+  callbackUrl?: string
 ) => {
   await signIn(provider.id, {
-    redirectTo: APP_ROUTES.DASHBOARD,
+    redirectTo: callbackUrl ?? APP_ROUTES.DASHBOARD,
   });
 };
 
-export const signOutAction = async () => {
+export const signOutAction = async (callbackUrl: string | null) => {
   await signOut({
-    redirectTo: APP_ROUTES.LOGIN,
+    redirectTo: callbackUrl ?? APP_ROUTES.LOGIN,
   });
 };

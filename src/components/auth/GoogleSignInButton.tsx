@@ -12,9 +12,10 @@ const ProviderIcons: Record<string, React.ComponentType> = {
 type AuthAction = "signin" | "signup";
 type OAuthButtonProps = {
   authType: AuthAction;
+  callbackUrl?: string;
 };
 
-const OAuthButton = ({ authType }: OAuthButtonProps) => {
+const OAuthButton = ({ authType, callbackUrl }: OAuthButtonProps) => {
   const buttonText = authType === "signin" ? "Sign in" : "Sign up";
   return (
     <div className="flex justify-between gap-2">
@@ -22,7 +23,7 @@ const OAuthButton = ({ authType }: OAuthButtonProps) => {
         const Icon = ProviderIcons[provider.id];
         return (
           <form
-            action={(formData) => signInWithProvider(provider, formData)}
+            action={() => signInWithProvider(provider, callbackUrl)}
             key={provider.id}
           >
             <Button

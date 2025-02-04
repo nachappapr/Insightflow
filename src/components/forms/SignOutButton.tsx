@@ -1,9 +1,12 @@
 import { signOutAction } from "@/actions/auth.action";
 import { LogOut } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 const SignOutButton = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   return (
-    <form action={signOutAction}>
+    <form action={() => signOutAction(callbackUrl)}>
       <button
         className="px-4 py-2 hover:text-brand-secondary cursor-pointer flex items-center transition-fast group"
         type="submit"

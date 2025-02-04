@@ -2,7 +2,8 @@ import { NextAuthConfig } from "next-auth";
 import type { Provider } from "next-auth/providers";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { PRIVATE_ROUTES } from "./constants/endpoint";
+import { NextResponse } from "next/server";
+import { APP_ROUTES, PRIVATE_ROUTES } from "./constants/endpoint";
 
 const providers: Provider[] = [Google, Github];
 
@@ -40,6 +41,14 @@ const authConfig = {
 
         return false;
       });
+
+      // redirect if user is logged in and trying to access login page
+      if (
+        (isLoggedIn && nextUrl.pathname === APP_ROUTES.LOGIN) ||
+        nextUrl.pathname === APP_ROUTES.SIGNUP
+      ) {
+        return NextResponse.redirect(new URL(APP_ROUTES.DASHBOARD, nextUrl));
+      }
 
       // Protect private routes
       if (isProtectedRoute && !isLoggedIn) {

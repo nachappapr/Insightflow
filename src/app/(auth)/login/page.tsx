@@ -8,12 +8,14 @@ import FormError from "@/components/forms/FormError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { APP_ROUTES } from "@/constants/endpoint";
 import { signInWithMagicLinkSchema } from "@/schema/auth.schema";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import SignUpPatternImage from "../../../../public/images/auth/signup-bg.png";
 
@@ -32,6 +34,9 @@ export default function LoginPage() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || APP_ROUTES.DASHBOARD;
 
   return (
     <div className="min-h-screen flex bg-white">
@@ -74,6 +79,11 @@ export default function LoginPage() {
               />
               <FormError errors={fields.email.errors} />
             </div>
+            <Input
+              type="hidden"
+              name="callbackurl"
+              defaultValue={callbackUrl}
+            />
 
             <Button
               className="w-full h-12 text-base "
@@ -91,7 +101,7 @@ export default function LoginPage() {
             </span>
             <div className="flex-grow border-t border-gray-300" />
           </div>
-          <GoogleSignInButton authType="signin" />
+          <GoogleSignInButton authType="signin" callbackUrl={callbackUrl} />
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?&nbsp;
