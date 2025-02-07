@@ -6,7 +6,10 @@ import productImage from "../../../public/images/landing/product-image.png";
 
 const ProductShowcase = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-[#ffffff] to-[#D2DCFF] overflow-x-clip">
+    <section
+      className="py-24 bg-gradient-to-b from-[#ffffff] to-[#D2DCFF] overflow-x-clip"
+      id="product-showcase"
+    >
       <motion.div
         className="centered-layout flex flex-col items-center text-center"
         initial={{ opacity: 0, y: 20 }}
@@ -20,7 +23,7 @@ const ProductShowcase = () => {
           See how teams use InsightFlow to prioritize feedback, make data-driven
           decisions, and deliver features their users actually want.
         </p>
-        <Image src={productImage} alt="product image" />
+        <Image src={productImage} alt="product image" className="rounded-md" />
       </motion.div>
     </section>
   );

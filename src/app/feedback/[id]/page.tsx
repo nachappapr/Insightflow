@@ -6,6 +6,7 @@ import CommentListSkeleton from "@/components/skeletons/CommentListSkeleton";
 import FeedbackCardSkeleton from "@/components/skeletons/FeedbackCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { APP_ROUTES } from "@/constants/endpoint";
+import { isUserFeedbackOwner } from "@/data/feedback.data";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -15,6 +16,22 @@ const FeedbackDetailPage = async (props: {
 }) => {
   const params = await props.params;
   const feedbackId = params.id;
+  const enableEdit = await isUserFeedbackOwner(feedbackId);
+
+  const renderEditButton = () => {
+    if (enableEdit) {
+      return (
+        <Button
+          variant="edit-action"
+          className="h4-bold text-white"
+          disabled={enableEdit}
+        >
+          <Link href={`/feedback/${feedbackId}/edit`}>Edit Feedback</Link>
+        </Button>
+      );
+    }
+    return null;
+  };
 
   return (
     <LayoutContainer className="form-width">
@@ -26,9 +43,7 @@ const FeedbackDetailPage = async (props: {
           <ChevronLeft size={24} stroke="#4661E6" />
           <Link href={APP_ROUTES.DASHBOARD}> Go back</Link>
         </Button>
-        <Button variant="edit-action" className="h4-bold text-white">
-          <Link href={`/feedback/${feedbackId}/edit`}>Edit Feedback</Link>
-        </Button>
+        {renderEditButton()}
       </div>
       <div className="mt-6 flex flex-col gap-6">
         <Suspense fallback={<FeedbackCardSkeleton />}>

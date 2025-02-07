@@ -3,7 +3,6 @@ import type { CommentType } from "@/types/feedback.types";
 import { AnimatePresence } from "motion/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useState } from "react";
-import defaultUserImageUrl from "../../../public/images/user/default-user.jpg";
 import AddReplies from "../forms/AddReplies";
 import CommentEditor from "../forms/EditComment";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -38,10 +37,17 @@ const Comments = ({
   const handleDelete = () => setIsDeleteModalOpen((prevState) => !prevState);
   const handleEditComplete = useCallback(() => setIsEditing(false), []);
 
-  const defaultAlt = comment.user.name ?? comment.user.email;
   const isFirstLevelReply = depth === 1;
   const replyButtonLabel = isReplying ? "Cancel" : "Reply";
   const canReply = comment.user.id !== currentUserId;
+
+  const avartarFallback = comment.user.name
+    ? comment.user.name?.charAt(0)?.toUpperCase()
+    : comment.user.email?.charAt(0)?.toUpperCase();
+  const nameFromEmail = comment.user.email.split("@")[0];
+  const name = comment.user.name ?? nameFromEmail;
+  const username = comment.user.username ?? nameFromEmail;
+  const userImage = comment.user.image ?? "";
 
   const renderReplyButton = () => {
     if (canReply) {
@@ -60,16 +66,12 @@ const Comments = ({
     <div className={isReply && isFirstLevelReply ? "ml-12 md:ml-24" : ""}>
       <div className="grid grid-cols-[40px,2fr,1fr] gap-4 items-start md:gap-x-8 md:gap-y-4 ">
         <Avatar className="h-10 w-10">
-          <AvatarImage src={defaultUserImageUrl.src} alt={defaultAlt} />
-          <AvatarFallback>{defaultAlt?.[0]}</AvatarFallback>
+          <AvatarImage src={userImage} alt={name} />
+          <AvatarFallback>{avartarFallback}</AvatarFallback>
         </Avatar>
         <div>
-          <h4 className="h4-bold text-text-primary">
-            {comment.user.name ?? "nachappapr"}
-          </h4>
-          <p className="h4-bold !font-normal">
-            @{comment.user.email.slice(0, 4)}
-          </p>
+          <h4 className="h4-bold text-text-primary">{name}</h4>
+          <p className="h4-bold !font-normal">@{username}</p>
         </div>
         <div className="justify-self-end">
           {renderReplyButton()}

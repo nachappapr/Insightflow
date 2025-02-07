@@ -1,6 +1,9 @@
+"use client";
+
 import { APP_ROUTES } from "@/constants/endpoint";
 import { ArrowRight, MenuIcon } from "lucide-react";
 import Link from "next/link";
+import { Link as ScrollLink } from "react-scroll";
 import AnimatedWaveLogo from "../common/AnimatedWaveLogo";
 import { Button } from "../ui/button";
 
@@ -24,24 +27,30 @@ const Header = () => {
             <AnimatedWaveLogo size={40} isBrandTextRequired={true} />
             <MenuIcon className="h-5 w-5 md:hidden" />
             <nav className="hidden md:flex items-center gap-6 text-black ">
-              <Link
-                href="/features"
-                className="hover:text-brand-secondary font-semibold transition-fast link-underline"
+              <ScrollLink
+                to="product-showcase"
+                className="hover:text-brand-secondary font-semibold transition-fast link-underline cursor-pointer"
+                smooth={true}
+                duration={500}
+                offset={-50}
               >
                 About
-              </Link>
-              <Link
-                href="/features"
-                className="hover:text-brand-secondary font-semibold transition-fast link-underline"
+              </ScrollLink>
+              <ScrollLink
+                to="features"
+                className="hover:text-brand-secondary font-semibold transition-fast link-underline cursor-pointer"
+                smooth={true}
+                duration={500}
+                offset={-50}
               >
                 Features
-              </Link>
-              <Link
-                href="/features"
+              </ScrollLink>
+              {/* <Link
+                href="/pricing"
                 className="hover:text-brand-secondary font-semibold transition-fast link-underline"
               >
                 Pricing
-              </Link>
+              </Link> */}
 
               <Button variant="primaryAction" asChild>
                 <Link href={APP_ROUTES.SIGNUP}>Get Started</Link>

@@ -44,8 +44,9 @@ const authConfig = {
 
       // redirect if user is logged in and trying to access login page
       if (
-        (isLoggedIn && nextUrl.pathname === APP_ROUTES.LOGIN) ||
-        nextUrl.pathname === APP_ROUTES.SIGNUP
+        isLoggedIn &&
+        (nextUrl.pathname === APP_ROUTES.LOGIN ||
+          nextUrl.pathname === APP_ROUTES.SIGNUP)
       ) {
         return NextResponse.redirect(new URL(APP_ROUTES.DASHBOARD, nextUrl));
       }

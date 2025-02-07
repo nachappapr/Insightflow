@@ -6,7 +6,10 @@ import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
-    <section className="pt-8 pb-20 md:pt-5 md:pb-10 bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#4661E6,#F7F8FD_60%)] overflow-x-clip">
+    <section
+      className="pt-8 pb-20 md:pt-5 md:pb-10 bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#4661E6,#F7F8FD_60%)] overflow-x-clip"
+      id="hero"
+    >
       <div className="centered-layout">
         <div className="md:flex items-center justify-between">
           <div className="md:flex-1">

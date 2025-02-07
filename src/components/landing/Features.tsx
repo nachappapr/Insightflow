@@ -51,7 +51,7 @@ const itemVariants = {
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white" id="features">
       <div className="centered-layout flex flex-col items-center">
         <motion.div
           className="flex flex-col items-center text-center"

@@ -60,6 +60,12 @@ function FeedbackCard({ item, disableLink }: FeedbackCardProps) {
   };
 
   const engagementStatus = getEngagementLevel(optimisticLikes);
+  const avartarFallback = item.user.name
+    ? item.user.name?.charAt(0)?.toUpperCase()
+    : item.user.email?.charAt(0)?.toUpperCase();
+  const nameFromEmail = item.user.email.split("@")[0];
+  const name = item.user.name ?? nameFromEmail;
+  const userImage = item.user.image ?? "";
 
   return (
     <Card className="w-full card overflow-hidden shadow-none">
@@ -81,11 +87,11 @@ function FeedbackCard({ item, disableLink }: FeedbackCardProps) {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Avatar className="w-6 h-6">
-                <AvatarImage src={""} alt={item.user.name ?? ""} />
-                <AvatarFallback>{item.user.name}</AvatarFallback>
+                <AvatarImage src={userImage} alt={name} />
+                <AvatarFallback>{avartarFallback}</AvatarFallback>
               </Avatar>
-              <span className="h4-bold text-text-primary">
-                {item.user.name}
+              <span className="h4-bold text-text-primary capitalize">
+                {name}
               </span>
             </div>
             <span className="text-sm flex items-center gap-1">

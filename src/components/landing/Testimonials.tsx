@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 
 const Testimonials = () => {
   return (
-    <section className="pt-0 pb-10 bg-white overflow-hidden">
+    <section className="pt-0 pb-10 bg-white overflow-hidden" id="testimonials">
       <motion.div
         className="centered-layout flex flex-col items-center [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)]"
         initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ const Testimonials = () => {
               translateX: "-50%",
             }}
             transition={{
-              duration: 20,
+              duration: 40,
               repeat: Infinity,
               repeatType: "loop",
               ease: "linear",

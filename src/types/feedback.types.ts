@@ -10,6 +10,8 @@ export type User = {
   name: string | null;
   email: string;
   id: string;
+  image: string | null;
+  username: string | null;
 };
 
 export type CommentType = {
@@ -27,6 +29,9 @@ export type FeedbackType = {
   user: {
     name: string | null;
     id: string;
+    image: string | null;
+    email: string;
+    username: string | null;
   };
   id: string;
   createdAt: Date;

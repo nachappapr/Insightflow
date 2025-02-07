@@ -4,7 +4,10 @@ import AnimatedWaveLogo from "../common/AnimatedWaveLogo";
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-brand-secondary to-brand-primary text-white py-12">
+    <footer
+      className="bg-gradient-to-r from-brand-secondary to-brand-primary text-white py-12"
+      id="footer"
+    >
       <div className="centered-layout">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <AnimatedWaveLogo variant="secondary" />
