@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import cog from "../../../public/images/landing/cog.png";
-import cylinder from "../../../public/images/landing/cylinder.png";
+import FeedbackCommentImage from "../../../public/images/landing/feedback-comments.png";
 import { Button } from "../ui/button";
 
 const Hero = () => {
@@ -34,16 +33,9 @@ const Hero = () => {
 
           <div className="mt-6 md:mt-0 md:h-[648px] md:flex-1 relative">
             <Image
-              src={cog}
-              alt="cog image"
-              className="md:absolute md:h-full md:w-auto md:max-w-none md:-left-6 lg:left-0 animate-float"
-            />
-            <Image
-              src={cylinder}
-              alt="cylinder image"
-              height={220}
-              width={220}
-              className="hidden md:block md:absolute -left-32 -top-8"
+              src={FeedbackCommentImage}
+              alt="feedback comments"
+              className="md:absolute md:h-full md:w-auto md:max-w-none md:-left-6 lg:left-0 animate-float rounded-lg"
             />
           </div>
         </div>
