@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient
+      id="waveGradient"
+      x1="0%"
+      y1="0%"
+      x2="100%"
+      y2="100%"
+    >
+      <stop offset="0%" stop-color="#8B5CF6">
+        <animate
+          attributeName="stop-color"
+          values="#8B5CF6; #6D28D9; #8B5CF6"
+          dur="4s"
+          repeatCount="indefinite"
+        />
+      </stop>
+      <stop offset="100%" stop-color="#3B82F6">
+        <animate
+          attributeName="stop-color"
+          values="#3B82F6; #2563EB; #3B82F6"
+          dur="4s"
+          repeatCount="indefinite"
+        />
+      </stop>
+    </linearGradient>
+
+    <path
+      id="wavePath"
+      d="M12 24 C16 18, 20 30, 24 24 C28 18, 32 30, 36 24"
+    >
+      <animate
+        attributeName="d"
+        values="
+          M12 24 C16 18, 20 30, 24 24 C28 18, 32 30, 36 24;
+          M12 24 C16 30, 20 18, 24 24 C28 30, 32 18, 36 24;
+          M12 24 C16 18, 20 30, 24 24 C28 18, 32 30, 36 24
+        "
+        dur="3s"
+        repeatCount="indefinite"
+      />
+    </path>
+  </defs>
+
+  <circle
+    cx="24"
+    cy="24"
+    r="20"
+    fill="url(#waveGradient)"
+  >
+    <animate
+      attributeName="r"
+      values="20; 19.5; 20"
+      dur="2s"
+      repeatCount="indefinite"
+    />
+  </circle>
+
+  <use
+    href="#wavePath"
+    stroke="white"
+    stroke-width="3"
+    fill="none"
+    opacity="0.9"
+  />
+
+  <circle cx="24" cy="24" r="3" fill="white">
+    <animate
+      attributeName="r"
+      values="3; 2.5; 3"
+      dur="2s"
+      repeatCount="indefinite"
+    />
+  </circle>
+</svg>

@@ -11,6 +11,23 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const id = (await params).id;
+  return {
+    title: `Feedback #${id}`,
+    description: "Detailed feedback analysis and insights",
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
 const FeedbackDetailPage = async (props: {
   params: Promise<{ id: string }>;
 }) => {
@@ -21,11 +38,7 @@ const FeedbackDetailPage = async (props: {
   const renderEditButton = () => {
     if (enableEdit) {
       return (
-        <Button
-          variant="edit-action"
-          className="h4-bold text-white"
-          disabled={enableEdit}
-        >
+        <Button variant="edit-action" className="h4-bold text-white">
           <Link href={`/feedback/${feedbackId}/edit`}>Edit Feedback</Link>
         </Button>
       );

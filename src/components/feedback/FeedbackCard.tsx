@@ -61,8 +61,8 @@ function FeedbackCard({ item, disableLink }: FeedbackCardProps) {
 
   const engagementStatus = getEngagementLevel(optimisticLikes);
   const avartarFallback = item.user.name
-    ? item.user.name?.charAt(0)?.toUpperCase()
-    : item.user.email?.charAt(0)?.toUpperCase();
+    ? item.user.name?.charAt(0)
+    : item.user.email?.charAt(0);
   const nameFromEmail = item.user.email.split("@")[0];
   const name = item.user.name ?? nameFromEmail;
   const userImage = item.user.image ?? "";

@@ -42,8 +42,8 @@ const Comments = ({
   const canReply = comment.user.id !== currentUserId;
 
   const avartarFallback = comment.user.name
-    ? comment.user.name?.charAt(0)?.toUpperCase()
-    : comment.user.email?.charAt(0)?.toUpperCase();
+    ? comment.user.name?.charAt(0)
+    : comment.user.email?.charAt(0);
   const nameFromEmail = comment.user.email.split("@")[0];
   const name = comment.user.name ?? nameFromEmail;
   const username = comment.user.username ?? nameFromEmail;

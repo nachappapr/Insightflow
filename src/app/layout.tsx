@@ -11,8 +11,16 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Product Feedback App",
-  description: "A platform for collecting and managing product feedback",
+  title: {
+    default: "InsightFlow",
+    template: "%s | InsightFlow",
+  },
+  description: "Transform customer feedback into actionable insights",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "InsightFlow",
+  },
 };
 
 export default function RootLayout({
